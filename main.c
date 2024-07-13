@@ -72,6 +72,9 @@ void viewCourses(COURSE** courses);
 // Searches student and prints information and possible actions
 void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES);
 
+// Lets you update an student
+void updateStudent(STUDENT* student);
+
 void myPause();
 
 int main(){
@@ -301,10 +304,39 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES){
 
         switch(action){
             case 1: addToCourse(student, courseList, MAX_COURSES); break;
+            case 2: updateStudent(student); break;
         }
     }
 
     PAUSE;
+}
+
+void updateStudent(STUDENT* student){
+    int option;
+
+    printf("\nUpdating student %s...\n",student->last_name);
+    printf("What would you like to update?\n");
+    printf("1. First Name\n");
+    printf("2. Last Name\n");
+    printf("3. Cancel\n");
+    printf("Option: ");
+
+    while(scanf(" %i", &option) != 1 || option < 1 || option > 3){
+        printf("Invalid option, please try again: "); getchar();
+    }
+
+    if(option == 1){
+        char first_name[50];
+        printf("\nEnter new first name: "); scanf(" %s", student->first_name);
+        printf("Student has been updated.\n");
+    }
+    else if(option == 2){
+        char last_name[50];
+        printf("\nEnter new last name: "); scanf(" %s", student->last_name);
+        printf("Student has been updated.\n");
+    }else if(option == 3){
+        printf("No changes have been made.\n");
+    }
 }
 
 void myPause() {
