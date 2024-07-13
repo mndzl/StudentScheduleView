@@ -134,11 +134,6 @@ int displayMenu(){
 }
 
 void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
-    if(courseList[0] == NULL){
-        printf("\nThere are no courses available.\n");
-        return;
-    }
-    
     // Finding course
     int courseID;
     int amountOfClasses = 0;
@@ -150,6 +145,11 @@ void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
             printf("%i. %s\n", i, courseList[i]->name);
         }
     }
+    if(amountOfClasses == 0){
+        printf("There are no available classes.\n");
+        return;
+    }
+
     printf("Select class to add: "); 
     while(scanf(" %i", &courseID)!=1 || courseID < 0 || courseID >= amountOfClasses){
         printf("Wrong option. Please try again: "); getchar();
@@ -188,8 +188,8 @@ void addStudent(STUDENT** students, int MAX_COURSES, int MAX_STUDENTS){
     newStudent->courses = calloc(MAX_COURSES, sizeof(COURSE*));
 
     printf("\n====== ADDING STUDENT ======\n");
-    printf("Enter first name: "); scanf("%s", newStudent->first_name);
-    printf("Enter last name: "); scanf("%s", newStudent->last_name);
+    printf("Enter first name: "); scanf(" %[^\n]", newStudent->first_name);
+    printf("Enter last name: "); scanf(" %[^\n]", newStudent->last_name);
 
     int position = 0;
     while(students[position] != NULL){
@@ -214,7 +214,7 @@ void addCourse(COURSE** courses, int MAX_COURSES){
     COURSE* newCourse = calloc(1, sizeof(COURSE));
 
     printf("\n====== ADDING COURSE ======\n");
-    printf("Enter course name: "); scanf("%s", newCourse->name);
+    printf("Enter course name: "); scanf(" %[^\n]", newCourse->name);
 
     int position = 0;
     while(courses[position] != NULL){position++;} 
