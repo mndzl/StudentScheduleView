@@ -75,6 +75,9 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES);
 // Lets you update an student
 void updateStudent(STUDENT* student);
 
+// Lets you set a student as inactive
+void removeStudent(STUDENT* student);
+
 void myPause();
 
 int main(){
@@ -175,13 +178,23 @@ void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
 
 void viewStudents(STUDENT** students){
     printf("\n======= ALL STUDENTS =======\n");
-    if(students[0] == NULL) {printf("There are not students to show."); PAUSE; return;}
 
     printf("ID\tFIRST\tLAST\n");
     int current = 0;
+    int count = 0;
     for(int i=0; students[i] != NULL; i++){
-        if(students[i]->active)printf("%i\t%s\t%s\n", students[i]->id, students[i]->first_name, students[i]->last_name);
+        if(students[i]->active){
+            printf("%i\t%s\t%s\n", students[i]->id, students[i]->first_name, students[i]->last_name);
+            count++;
+        }
     }
+
+    if(count == 0){
+        printf("There are no students to show.\n");
+    }else{
+        printf("Total: %i\n", count);
+    }
+
 
     PAUSE;
 }
@@ -243,8 +256,18 @@ void viewCourses(COURSE** courses){
 
     printf("ID\tNAME\tREGISTERED\n");
     int current = 0;
+    int count = 0;
     for(int i=0; courses[i] != NULL; i++){
-        if(courses[i]->active)printf("%i\t%s\t%i\n", courses[i]->id, courses[i]->name, courses[i]->registeredStudents);
+        if(courses[i]->active){
+            printf("%i\t%s\t%i\n", courses[i]->id, courses[i]->name, courses[i]->registeredStudents);
+            count++;
+        }
+    }
+
+    if(count == 0){
+        printf("There are no students to show.\n");
+    }else{
+        printf("Total: %i\n", count);
     }
 
     PAUSE;
@@ -294,9 +317,9 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES){
         int action;
         printf("\nWhat would you like to do?\n");
         printf("1. Add to course\n");
-        printf("2. Update student\n");
-        printf("3. Remove student\n");
-        printf("4. Go back\n");
+        printf("2. Remove from course\n");
+        printf("3. Update student\n");
+        printf("4. Remove student\n");
         printf("Option: ");
         while(scanf(" %i", &action) != 1 || action < 1 || action > 4){
             printf("Invalid option. Please try again: "); getchar();
@@ -304,7 +327,8 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES){
 
         switch(action){
             case 1: addToCourse(student, courseList, MAX_COURSES); break;
-            case 2: updateStudent(student); break;
+            case 3: updateStudent(student); break;
+            case 4: removeStudent(student); break;
         }
     }
 
@@ -336,6 +360,28 @@ void updateStudent(STUDENT* student){
         printf("Student has been updated.\n");
     }else if(option == 3){
         printf("No changes have been made.\n");
+    }
+}
+
+void removeStudent(STUDENT* student){
+    // set as inactive
+    // substract one from each course
+
+    char option;
+    printf("Are you sure you would like to remove student %s? (Y/N): ", student->last_name);
+    while(scanf(" %c", &option) != 1 || (option != 'Y' && option != 'y' && option != 'n' && option != 'N')){
+        printf("Invalid option. Please try again: "); getchar();
+    }
+
+    if (option == 'y' || option == 'Y'){
+        student->active = 0;
+
+        for(int i=0; student->courses[i] != NULL; i++){
+            student->courses[i]->registeredStudents--;
+        }
+        printf("Student removed.");
+    }else{
+        printf("No action has been made.\n");
     }
 }
 
