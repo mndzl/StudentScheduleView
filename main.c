@@ -162,6 +162,7 @@ void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
     }
 
     COURSE* course = courseList[courseID];
+    // Prevent duplicate course
 
     // Adding to student schedule
     int position = 0;
@@ -174,6 +175,39 @@ void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
     }else{
         printf("Sorry, you have reached the maximum amount of classes.");
     }
+}
+
+void removeFromCourse(STUDENT* student){
+    int courseNumber = 0;
+    int amountOfCourses = 0;
+    for(int i=0; student->courses[i] != NULL; i++) amountOfCourses++;
+    printf("Enter number of course to remove: ");
+    while(scanf(" %i", &courseNumber) != 1 || courseNumber > amountOfCourses || courseNumber < 0){
+        printf("Invalid option. Please try again: "); getchar();
+    }
+
+    char confirmation;
+    printf("Are you sure you would like to remove the student from %s? (Y/N): ", student->courses[courseNumber]->name);
+    while(scanf(" %c", &confirmation) != 1 || (confirmation != 'y' && confirmation != 'Y' && confirmation != 'n' && confirmation != 'N')){
+        printf("Invalid option. Please try again: "); getchar();
+    }    
+
+    if(confirmation == 'y' || confirmation == 'Y'){
+        // remove courses from list and push ahead all other courses
+        int i = courseNumber;
+        while(i < amountOfCourses - 1){
+            student->courses[i] = student->courses[i+1];
+            i++;
+        }
+        // Last Value
+        student->courses[i] = NULL;
+
+        printf("\nStudent has been removed from the class.\n");
+
+    } else{
+        printf("No change has been made.\n");
+    }
+
 }
 
 void viewStudents(STUDENT** students){
@@ -294,7 +328,7 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES){
                 int hasRegistered = 0;
                 
                 for(int j=0; students[i]->courses[j]!=NULL; j++){
-                    printf("- %s\n", students[i]->courses[j]->name);
+                    printf("%i. %s\n", j, students[i]->courses[j]->name);
                     hasRegistered = 1;
                 }
                 if(!hasRegistered) printf("Not registered in any course.\n");
@@ -320,13 +354,15 @@ void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES){
         printf("2. Remove from course\n");
         printf("3. Update student\n");
         printf("4. Remove student\n");
+        printf("5. Go back\n");
         printf("Option: ");
-        while(scanf(" %i", &action) != 1 || action < 1 || action > 4){
+        while(scanf(" %i", &action) != 1 || action < 1 || action > 5){
             printf("Invalid option. Please try again: "); getchar();
         }
 
         switch(action){
             case 1: addToCourse(student, courseList, MAX_COURSES); break;
+            case 2: removeFromCourse(student); break;
             case 3: updateStudent(student); break;
             case 4: removeStudent(student); break;
         }
