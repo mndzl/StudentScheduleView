@@ -78,6 +78,9 @@ void updateStudent(STUDENT* student);
 // Lets you set a student as inactive
 void removeStudent(STUDENT* student);
 
+// Helper function to check if a student is already registered to that class
+int isRegistered(STUDENT* student, COURSE* course);
+
 void myPause();
 
 int main(){
@@ -139,6 +142,14 @@ int displayMenu(){
     return option;
 }
 
+int isRegistered(STUDENT* student, COURSE* course){
+    for(int i=0; student->courses[i] != NULL; i++){
+        if(student->courses[i] == course) return 1;
+    }
+
+    return 0;
+}
+
 void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
     // Finding course
     int courseID;
@@ -161,8 +172,12 @@ void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES){
         printf("Wrong option. Please try again: "); getchar();
     }
 
+    if(isRegistered(student, courseList[courseID])){
+        printf("\nStudent is already registered to that class.\n");
+        return;
+    }
+
     COURSE* course = courseList[courseID];
-    // Prevent duplicate course
 
     // Adding to student schedule
     int position = 0;
