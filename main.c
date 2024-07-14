@@ -7,11 +7,10 @@
 
     ---------- FEATURES ----------
     * Create/Update/Remove Student
-    * Create/Update/Remove Class
+    * Create Courses
     * View all students (sorted by last name)
     * View all courses (sorted by ID)
     * Search student and view courses
-    * Search class and view amount of students
     * Menu system
 
     ------- ERROR PREVENTION -------
@@ -105,11 +104,11 @@ int main(){
             case 1: viewStudents(studentList); break;
             case 2: searchStudent(studentList, courseList, MAX_COURSES); break;
             case 3: viewCourses(courseList); break;
-            case 5: addStudent(studentList, MAX_COURSES, MAX_STUDENTS); break;
-            case 6: addCourse(courseList, MAX_COURSES); break;
+            case 4: addStudent(studentList, MAX_COURSES, MAX_STUDENTS); break;
+            case 5: addCourse(courseList, MAX_COURSES); break;
         }
     }
-    while(option != 7);
+    while(option != 6);
 
 
     // Freeing memory
@@ -127,14 +126,13 @@ int displayMenu(){
     printf("1. View all students\n");
     printf("2. Search student\n");
     printf("3. View all courses\n");
-    printf("4. Search courses\n");
-    printf("5. Add student\n");
-    printf("6. Add course\n");
-    printf("7. Quit\n");
+    printf("4. Add student\n");
+    printf("5. Add course\n");
+    printf("6. Quit\n");
     printf("Option: ");
     int option;
 
-    while(scanf("%i", &option) != 1 || option > 7 || option < 1){
+    while(scanf("%i", &option) != 1 || option > 6 || option < 1){
         printf("Option invalid, please try again: ");
         getchar();
     }
