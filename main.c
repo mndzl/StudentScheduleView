@@ -30,57 +30,7 @@
     7. Quit
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#define PAUSE myPause()
-
-typedef struct {
-    int id;
-    char name[50];
-    int registeredStudents;
-    int active; // true or false
-} COURSE;
-
-typedef struct {
-    int id;
-    char first_name[50];
-    char last_name[50];
-    COURSE** courses;
-    int active; // true or false
-} STUDENT;
-
-// Displays menu and returns option selected
-int displayMenu();
-
-// Adds course to student schedule
-void addToCourse(STUDENT* student, COURSE** courseList, int MAX_COURSES);
-
-// Displays all students in list
-void viewStudents(STUDENT** student);
-
-// Adds student to list
-void addStudent(STUDENT** students, int MAX_COURSES, int MAX_STUDENTS);
-
-// Adds course to list
-void addCourse(COURSE** courses, int MAX_COURSES);
-
-// Displays all courses
-void viewCourses(COURSE** courses);
-
-// Searches student and prints information and possible actions
-void searchStudent(STUDENT** students, COURSE** courseList, int MAX_COURSES);
-
-// Lets you update an student
-void updateStudent(STUDENT* student);
-
-// Lets you set a student as inactive
-void removeStudent(STUDENT* student);
-
-// Helper function to check if a student is already registered to that class
-int isRegistered(STUDENT* student, COURSE* course);
-
-void myPause();
+#include "studentManager.h"
 
 int main(){
     STUDENT** studentList;
@@ -88,10 +38,8 @@ int main(){
     int MAX_STUDENTS;
     int MAX_COURSES;
 
-    // printf("Please enter max amount of students: "); scanf("%i",&MAX_STUDENTS);
-    // printf("Please enter max amount of courses: "); scanf("%i",&MAX_COURSES);
-    MAX_STUDENTS = 10;
-    MAX_COURSES = 10;
+    printf("Please enter max amount of students: "); scanf("%i",&MAX_STUDENTS);
+    printf("Please enter max amount of courses: "); scanf("%i",&MAX_COURSES);
 
     // Allocating memory
     studentList = calloc(MAX_STUDENTS, sizeof(STUDENT*));
@@ -225,6 +173,24 @@ void removeFromCourse(STUDENT* student){
 
 void viewStudents(STUDENT** students){
     printf("\n======= ALL STUDENTS =======\n");
+
+    // Sorting students array with bubble sort
+    int changed;
+    do {
+        changed = 0;
+        int current = 0;
+        while (students[current + 1] != NULL) {
+            if (strcmp(students[current]->last_name, students[current + 1]->last_name) > 0) {
+                // Swap
+                STUDENT* temp = students[current];
+                students[current] = students[current + 1];
+                students[current + 1] = temp;
+                changed = 1;
+            }
+            current++;
+        }
+    } while (changed);
+
 
     printf("ID\tFIRST\tLAST\n");
     int current = 0;
@@ -435,6 +401,6 @@ void removeStudent(STUDENT* student){
 }
 
 void myPause() {
-	printf("\n\nPress ENTER to continue....\n");
-	getchar(); getchar();
+	printf("\nPress ENTER to continue....\n");
+	getchar();
 }
